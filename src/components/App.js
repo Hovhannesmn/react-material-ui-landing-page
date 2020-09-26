@@ -1,21 +1,15 @@
 import React from 'react';
+import { ThemeProvider } from '@material-ui/core';
+
 import Header from './ui/Header';
-import ToolBar from '@material-ui/core/Toolbar/Toolbar';
+import theme from './ui/Theme';
 
 const App = props => {
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <Header />
-      {
-        [
-          ...new Array(120)
-        ].map(
-          () => ` In your terminal, navigate to the repo you want to make the changes in. Execute git config --list to check current username & email in your local repo.
-             Change username & email as desired. Make it a global change or specific to the local repo: git config [--global] user.name "Full Name" Done!`
-        ).join('\n')
-      }
       Hello
-    </div>
+    </ThemeProvider>
   );
 };
 
