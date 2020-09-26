@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     padding: 0,
     "&:hover": {
       backgroundColor: "transparent"
-    }
+    },
   },
   tabContainer: {
     marginLeft: "auto"
@@ -88,15 +88,19 @@ const routes = [
 
 export default function Header(props) {
   const classes = useStyles();
-  const [activeTab, setActiveTab] = useState(0);
+  const [value, setValue] = useState(() => {
+    const routeItem = routes.find(item => item.link === window.location.pathname) || {};
+    // setValue(routeItem.activeIndex || 0);
+    return routeItem.activeIndex || 0;
+  });
 
-  const handleChangeTab = useCallback((e, value) => {
-    setActiveTab(value);
-  }, []);
+  // useEffect(() => {
+  //  const routeItem = routes.find(item => item.link === window.location.pathname) || {};
+  //  setValue(routeItem.activeIndex || 0);
+  // }, [value]);
 
   const tabs = (
-    <React.Fragment>
-      {routes.map((route, index) => (
+      routes.map((route, index) => (
         <Tab
           key={`${route}${index}`}
           className={classes.tab}
@@ -107,9 +111,12 @@ export default function Header(props) {
           // aria-haspopup={route.ariaPopup}
           // onMouseOver={route.mouseOver}
         />
-      ))}
-    </React.Fragment>
+      ))
   );
+
+  const handleChangeTab = (e, value) => {
+    setValue(value);
+  };
 
   return (
     <React.Fragment>
@@ -120,20 +127,28 @@ export default function Header(props) {
               component={Link}
               to="/"
               disableRipple
-              onClick={() => {}}
               className={classes.logoContainer}
+              onClick={() => setValue(0)}
             >
               <img alt="company logo" className={classes.logo} src={logo} />
             </Button>
-            {tabs}
+            <Tabs
+              value={value}
+              onChange={handleChangeTab}
+              className={classes.tabContainer}
+              indicatorColor="secondary"
+            >
+              {tabs}
+            </Tabs>
             <Button
               variant="contained"
               color="secondary"
               className={classes.button}
+              onClick={() => setValue(0)}
+              disableRipple
             >
               free estimate
             </Button>
-
           </Toolbar>
         </AppBar>
       </ElevationScroll>
