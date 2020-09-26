@@ -70,6 +70,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const routes = [
+  { name: "Home", link: "/", activeIndex: 0 },
+  {
+    name: "Services",
+    link: "/services",
+    activeIndex: 1,
+    // ariaOwns: anchorEl ? "simple-menu" : undefined,
+    // ariaPopup: anchorEl ? "true" : undefined,
+    // mouseOver: event => handleClick(event)
+  },
+  { name: "The Revolution", link: "/revolution", activeIndex: 2 },
+  { name: "About Us", link: "/about", activeIndex: 3 },
+  { name: "Contact Us", link: "/contact", activeIndex: 4 }
+];
+
+
 export default function Header(props) {
   const classes = useStyles();
   const [activeTab, setActiveTab] = useState(0);
@@ -80,18 +96,18 @@ export default function Header(props) {
 
   const tabs = (
     <React.Fragment>
-      <Tabs
-        value={activeTab}
-        onChange={handleChangeTab}
-        className={classes.tabContainer}
-        indicatorColor="primary"
-      >
-        <Tab className={classes.tab} label="Home" />
-        <Tab className={classes.tab} label="Services" />
-        <Tab className={classes.tab} label="The Revolution" />
-        <Tab className={classes.tab} label="About us" />
-        <Tab className={classes.tab} label="Contact us" />
-      </Tabs>
+      {routes.map((route, index) => (
+        <Tab
+          key={`${route}${index}`}
+          className={classes.tab}
+          component={Link}
+          to={route.link}
+          label={route.name}
+          // aria-owns={route.ariaOwns}
+          // aria-haspopup={route.ariaPopup}
+          // onMouseOver={route.mouseOver}
+        />
+      ))}
     </React.Fragment>
   );
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { ThemeProvider } from '@material-ui/core';
 
@@ -11,7 +11,43 @@ const App = props => {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Header />
-        Hello
+        <Switch>
+          <Route
+            exact
+            path="/"
+            component={props => (
+              <div>Home</div>
+            )}
+          />
+          <Route
+            exact
+            path="/services"
+            component={props => (
+              <div>Services</div>
+            )}
+          />
+          <Route
+            exact
+            path="/revolution"
+            component={props => (
+              <div>The Revolution</div>
+            )}
+          />
+          <Route
+            exact
+            path="/about"
+            component={props => (
+              <div>About Us</div>
+            )}
+          />
+          <Route
+            exact
+            path="/contact"
+            component={props => (
+              <div>Contact Us</div>
+            )}
+          />
+        </Switch>
       </BrowserRouter>
     </ThemeProvider>
   );
