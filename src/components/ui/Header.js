@@ -1,56 +1,76 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 
-import AppBar from '@material-ui/core/AppBar';
-import ToolBar from '@material-ui/core/ToolBar';
-import { useScrollTrigger } from '@material-ui/core';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import useScrollTrigger from "@material-ui/core/useScrollTrigger";
+import { makeStyles } from "@material-ui/styles";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Button from "@material-ui/core/Button";
 
-const ElevationScroll = props => {
-  const { children, window } = props;
+import logo from "../../assets/logo.svg";
+
+function ElevationScroll(props) {
+  const { children } = props;
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 0,
-    target: window ? window() : undefined,
+    threshold: 0
   });
 
   return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0,
+    elevation: trigger ? 4 : 0
   });
-};
+}
 
-const useStyles = makeStyles(theme => {
-  return ({
-    toolbarMargin: {
-      ...theme.mixins.toolbar,
-      marginBottom: '3em',
+const useStyles = makeStyles(theme => ({
+  toolbarMargin: {
+    ...theme.mixins.toolbar,
+    marginBottom: "3em",
+    [theme.breakpoints.down("md")]: {
+      marginBottom: "2em"
     },
-    logo: {
-      height: '7em',
-    },
-    tabContainer: {
-      marginLeft: 'auto',
-    },
-    tab: {
-      ...theme.typography.tab,
-      minWidth: 10,
-      marginLeft: '25px',
-    },
-    button: {
-      ...theme.typography.estimate,
-      borderRadius: '50px',
-      marginLeft: '50px',
-      marginRight: '25px',
-      height: '45px',
+    [theme.breakpoints.down("xs")]: {
+      marginBottom: "1.25em"
     }
-  })
-});
+  },
+  logo: {
+    height: "8em",
+    [theme.breakpoints.down("md")]: {
+      height: "7em"
+    },
+    [theme.breakpoints.down("xs")]: {
+      height: "5.5em"
+    }
+  },
+  logoContainer: {
+    padding: 0,
+    "&:hover": {
+      backgroundColor: "transparent"
+    }
+  },
+  tabContainer: {
+    marginLeft: "auto"
+  },
+  tab: {
+    ...theme.typography.tab,
+    minWidth: 10,
+    marginLeft: "25px"
+  },
+  button: {
+    ...theme.typography.estimate,
+    borderRadius: "50px",
+    marginLeft: "50px",
+    marginRight: "25px",
+    height: "45px",
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.light
+    },
+  },
+}));
 
-const Header = props => {
+export default function Header(props) {
   const classes = useStyles();
   const [activeTab, setActiveTab] = useState(0);
 
@@ -58,25 +78,38 @@ const Header = props => {
     setActiveTab(value);
   }, []);
 
+  const tabs = (
+    <React.Fragment>
+      <Tabs
+        value={activeTab}
+        onChange={handleChangeTab}
+        className={classes.tabContainer}
+        indicatorColor="primary"
+      >
+        <Tab className={classes.tab} label="Home" />
+        <Tab className={classes.tab} label="Services" />
+        <Tab className={classes.tab} label="The Revolution" />
+        <Tab className={classes.tab} label="About us" />
+        <Tab className={classes.tab} label="Contact us" />
+      </Tabs>
+    </React.Fragment>
+  );
+
   return (
-    <ElevationScroll>
-      <AppBar position="fixed" color="secondary">
-        <ToolBar disableGutters>
-          <Typography>
-            Arc Development
-          </Typography>
-          <Tabs
-            value={activeTab}
-            onChange={handleChangeTab}
-            className={classes.tabContainer}
-            indicatorColor="primary"
-          >
-              <Tab className={classes.tab} label="Home" />
-              <Tab className={classes.tab} label="Services" />
-              <Tab className={classes.tab} label="The Revolution" />
-              <Tab className={classes.tab} label="About us" />
-              <Tab className={classes.tab} label="Contact us" />
-            </Tabs>
+    <React.Fragment>
+      <ElevationScroll>
+        <AppBar position="fixed" className={classes.appbar}>
+          <Toolbar disableGutters>
+            <Button
+              component={Link}
+              to="/"
+              disableRipple
+              onClick={() => {}}
+              className={classes.logoContainer}
+            >
+              <img alt="company logo" className={classes.logo} src={logo} />
+            </Button>
+            {tabs}
             <Button
               variant="contained"
               color="secondary"
@@ -84,10 +117,11 @@ const Header = props => {
             >
               free estimate
             </Button>
-        </ToolBar>
-      </AppBar>
-    </ElevationScroll>
-  );
-};
 
-export default Header;
+          </Toolbar>
+        </AppBar>
+      </ElevationScroll>
+      <div className={classes.toolbarMargin} />
+    </React.Fragment>
+  );
+}
